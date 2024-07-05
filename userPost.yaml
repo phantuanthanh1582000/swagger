@@ -159,7 +159,36 @@ paths:
            application/json:
              schema:
                 $ref: '#/components/schemas/CreatePostResponse'
-
+  /edit-post/{IdPost}:
+    put:
+      tags:
+        - Post
+      summary: Edit post
+      description: Edit post
+      operationId: editPost
+      parameters:
+        - name: IdPost
+          in: path
+          description: Id Post
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Edit post
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: title
+                content:
+                  type: string
+                  example: content
+      responses:
+        '200': 
+         description: Cập nhật post thành công
       
 
 
