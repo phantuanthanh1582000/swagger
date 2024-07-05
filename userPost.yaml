@@ -1,0 +1,299 @@
+openapi: 3.0.0
+info:
+  title: Express API with Swagger
+  description: |-
+    A simple CRUD API application documented with Swagger
+  contact:
+    email: tphan10932@gmail.com
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001
+tags:
+  - name: User
+    description: Everything about user
+  - name: Post
+    description: Everything about post
+paths:
+  /create-user:
+    post:
+      tags:
+        - User
+      summary: Create user
+      description: Create user
+      operationId: createUser
+      requestBody:
+        description: User infor
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createuser'
+        required: true
+      responses:
+        '200':
+          description: Thêm thành công 
+  /users:
+    get:
+      tags:
+        - User
+      summary: Get all users
+      description: Get all users
+      operationId: getUsers
+      responses:
+        default: 
+         description: Lấy thông tin users thành công
+         content:
+           application/json:
+             schema:
+               type: array
+               items:
+                $ref: '#/components/schemas/Users'
+  /edit-user/{username}:   
+    put:
+      tags:
+        - User
+      summary: Update user
+      description: Update user
+      operationId: updateUser
+      parameters:
+        - name: username
+          in: path
+          description: user name
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existent user in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/edituser'
+      responses:
+        default: 
+         description: Chỉnh sửa thành công
+  /del-user/{IdUser}:   
+    delete:
+      tags:
+        - User
+      summary: Delete user
+      description: Delete user
+      operationId: deleteUser
+      parameters:
+        - name: IdUser
+          in: path
+          description: Id User
+          required: true
+          schema:
+            type: string
+      responses:
+        '200': 
+         description: Xóa thành công
+  /create-post/{IdUser}:
+    post:
+      tags:
+        - Post
+      summary: Create post
+      description: Create post
+      operationId: createPost
+      parameters:
+        - name: IdUser
+          in: path
+          description: Id User 
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Create post
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: title
+                content:
+                  type: string
+                  example: content
+      responses:
+        default: 
+         description: Tạo bài đăng thành công
+         content:
+           application/json:
+             schema:
+                $ref: '#/components/schemas/createpost'
+  /del-post/{IdPost}:
+    delete:
+      tags:
+        - Post
+      summary: Delete post
+      description: Delete post
+      operationId: deletePost
+      parameters:
+        - name: IdPost
+          in: path
+          description: Id Post
+          required: true
+          schema:
+            type: string
+      responses:
+        '200': 
+         description: Xóa thành công
+  /user-posts/{username}:
+    get:
+      tags:
+        - Post
+      summary: Get post
+      description: Get post
+      operationId: getPost
+      parameters:
+        - name: username
+          in: path
+          description: User name
+          required: true
+          schema:
+            type: string
+      responses:
+        default: 
+         description: Lấy thông tin bài đăng của user
+         content:
+           application/json:
+             schema:
+                $ref: '#/components/schemas/CreatePostResponse'
+
+      
+
+
+
+
+
+components:
+  schemas:
+    createuser:
+      type: object
+      properties:
+        username:
+          type: string
+          example: string
+        password: 
+          type: string
+          example: password
+        email:
+          type: string
+          example: email
+    Users:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: string
+        username:
+          type: string
+          example: string
+        password:
+          type: string
+          example: string
+        email:
+          type: string
+          format: email
+          example: string
+        posts:
+          type: array
+          items:
+            type: string
+          example: ["6664126a16d1ba1e564791e4","666412a416d1ba1e564791e8"]
+        __v:
+          type: integer
+          example: 1
+    edituser:
+      type: object
+      properties:
+        password: 
+          type: string
+          example: password
+        email:
+          type: string
+          example: email
+    createpost:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Tạo bài đăng thành công
+        post:
+          type: object
+          properties:
+            title:
+              type: string
+              nullable: true
+            content:
+              type: string
+              nullable: true
+            id_user:
+              type: string
+              example: 668644bcfba52d4957b63974
+            _id:
+              type: string
+              example: 6686a34056fa72f2af0c6c48
+            __v:
+              type: integer
+              example: 0
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 666408f22ef93442e2a29630
+        username:
+          type: string
+          example: user1
+        password:
+          type: string
+          example: Thanh123456789*
+        email:
+          type: string
+          example: tnguyen10932@gmail.com
+        posts:
+          type: array
+          items:
+            type: string
+            example: 666409652ef93442e2a29632
+        __v:
+          type: integer
+          example: 6
+    Post:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 666409652ef93442e2a29632
+        title:
+          type: string
+          nullable: true
+        content:
+          type: string
+          nullable: true
+        id_user:
+          type: string
+          example: 666408f22ef93442e2a29630
+        __v:
+          type: integer
+          example: 0
+    UserPostsResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        userPosts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Post'
+    CreatePostResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Tạo bài đăng thành công
+        post:
+          $ref: '#/components/schemas/Post'          
+     
